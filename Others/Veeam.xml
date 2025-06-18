@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:51:35Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Veeam</template>
+            <name>Veeam</name>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Veeam Backup and Replication</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Veeam Job Status</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell asnp VeeamPSSnapIn;get-vbrjob^|select Name,TypeToString,LatestRunLocal,IsRunning,@{l='LatestStatus';e={$_.Info.LatestStatus}}^|ConvertTo-Json -C&quot;]</key>
+                    <delay>15m</delay>
+                    <history>1d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>Veeam Backup and Replication</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Veeam Jobs</name>
+                    <type>DEPENDENT</type>
+                    <key>VeeamJobs</key>
+                    <delay>0</delay>
+                    <lifetime>7d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Veeam Job Latest Run {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>VeeamJobLatestRun[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>Veeam Backup and Replication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$[?(@.Name == '{#NAME}')].LatestRunLocal.first()</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>2d</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell asnp VeeamPSSnapIn;get-vbrjob^|select Name,TypeToString,LatestRunLocal,IsRunning,@{l='LatestStatus';e={$_.Info.LatestStatus}}^|ConvertTo-Json -C&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(25h)}=1</expression>
+                                    <name>Veeam job running too long {#NAME}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Veeam Job Running {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>VeeamJobRunning[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>Veeam Backup and Replication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$[?(@.Name == '{#NAME}')].IsRunning.first()</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell asnp VeeamPSSnapIn;get-vbrjob^|select Name,TypeToString,LatestRunLocal,IsRunning,@{l='LatestStatus';e={$_.Info.LatestStatus}}^|ConvertTo-Json -C&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Veeam Job Status {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>VeeamJobStatus[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Veeam Backup and Replication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$[?(@.Name == '{#NAME}')].LatestStatus.first()</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell asnp VeeamPSSnapIn;get-vbrjob^|select Name,TypeToString,LatestRunLocal,IsRunning,@{l='LatestStatus';e={$_.Info.LatestStatus}}^|ConvertTo-Json -C&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Veeam Job Type {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>VeeamJobType[{#NAME}]</key>
+                            <delay>0</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>Veeam Backup and Replication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$[?(@.Name == '{#NAME}')].TypeToString.first()</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1h</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell asnp VeeamPSSnapIn;get-vbrjob^|select Name,TypeToString,LatestRunLocal,IsRunning,@{l='LatestStatus';e={$_.Info.LatestStatus}}^|ConvertTo-Json -C&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Veeam:VeeamJobRunning[{#NAME}].str(false)}=1 and {Veeam:VeeamJobRunning[{#NAME}].str(false,#1)}=1 and {Veeam:VeeamJobStatus[{#NAME}].last()}=2 and {Veeam:VeeamJobStatus[{#NAME}].last(#1)}=2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{Veeam:VeeamJobRunning[{#NAME}].str(false)}=1 and {Veeam:VeeamJobStatus[{#NAME}].last()}&lt;&gt;2</recovery_expression>
+                            <name>Veeam job failed {#NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Veeam:VeeamJobRunning[{#NAME}].str(false)}=1 and {Veeam:VeeamJobRunning[{#NAME}].str(false,#1)}=1 and {Veeam:VeeamJobStatus[{#NAME}].last()}=1 and {Veeam:VeeamJobStatus[{#NAME}].last(#1)}=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{Veeam:VeeamJobRunning[{#NAME}].str(false)}=1 and &#13;
+{Veeam:VeeamJobStatus[{#NAME}].last()}&lt;&gt;1</recovery_expression>
+                            <name>Veeam job warning {#NAME}</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <master_item>
+                        <key>system.run[&quot;powershell asnp VeeamPSSnapIn;get-vbrjob^|select Name,TypeToString,LatestRunLocal,IsRunning,@{l='LatestStatus';e={$_.Info.LatestStatus}}^|ConvertTo-Json -C&quot;]</key>
+                    </master_item>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#NAME}</lld_macro>
+                            <path>$.Name</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$VBRJOBLASTCOMPLETE}</macro>
+                    <value>129600</value>
+                </macro>
+                <macro>
+                    <macro>{$VBRJOBRUNTIME}</macro>
+                    <value>21600</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>

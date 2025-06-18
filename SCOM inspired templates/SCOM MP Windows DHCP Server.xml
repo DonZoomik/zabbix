@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:47:56Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>SCOM MP Windows DHCP Server</template>
+            <name>SCOM MP Windows DHCP Server</name>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>DHCP Server</name>
+                </application>
+                <application>
+                    <name>DHCP Server Failover</name>
+                </application>
+                <application>
+                    <name>DHCP Server IPv4 Scope</name>
+                </application>
+                <application>
+                    <name>DHCP Server IPv6 Scope</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>DHCP Server Service Health</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service.info[DHCPserver]</key>
+                    <delay>5m</delay>
+                    <applications>
+                        <application>
+                            <name>DHCP Server</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;0</expression>
+                            <name>DHCP Server Service Stopped</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Windows Server DHCP Server Failover Relationship</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;wmic /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4Failover Call GetByName&quot;]</key>
+                    <delay>1d</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.FailoverServerWatcher&amp;Type=ClassType&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DHCP Server Failover Server Relationship Lost Communication with Partner Server Monitor {#NAME}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DhcpAdminEvents, relationship {#NAME} ,20252|20259|20260,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server Failover</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(20252)}=1</expression>
+                                    <name>DHCP Server Failover Server Relationship has reported that lost communication with its partner server {#PARTNERNAME}</name>
+                                    <url>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.FailoverServerWatcher.UnitMonitor.LostCommunicationWithfailoverPartnerServer&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</url>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DHCP ServerFailover Server Relationship Out of Sync Monitor {#NAME}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DhcpAdminEvents, relationship {#NAME} ,20253|20251,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server Failover</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(20253)}=1</expression>
+                                    <name>DHCP Server Failover Server Relationship has reported that is out of sync with its partner server {#PARTNERNAME}</name>
+                                    <url>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.FailoverServerWatcher.UnitMonitor.OutOfTimeSync&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</url>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DHCP Server Failover Server Relationship Error in Communication with Partner Server Monitor {#NAME}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DhcpAdminEvents, relationship {#NAME} ,20255|20254,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server Failover</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(20255)}=1</expression>
+                                    <name>DHCP Server Failover Server Relationship has reported an error in communication with its partner server {#PARTNERSERVER}</name>
+                                    <url>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.FailoverServerWatcher.UnitMonitor.ErrorCommunicationWithfailoverPartnerServer&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</url>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DHCP Server Failover Server Relationship Health Monitor {#NAME}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;wmic /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4Failover Call GetByName Name=\&quot;{#NAME}\&quot;&quot;]</key>
+                            <delay>15m</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server Failover</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <params>var multiline = value;
+var lines = multiline.replace(/\r\n/g,'\n').replace(/\n\n/g,'\n').split('\n');
+lines.splice(0,7);
+lines.splice(-4);
+var multiline = '[' + lines.join('\n') + '\n}]';
+var multiline = multiline.replace(/instance of DhcpServerv4Failover/g,'').replace(/\t/g,'\&quot;').replace(/ = /g,'\&quot;:\&quot;').replace(/;/g,'\&quot;,').replace(/\&quot;\&quot;/g,'\&quot;').replace(/,\n\}/g,'\n\}').replace(/\&quot;\{/g,'\[').replace(/\}\&quot;/g,'\]');
+return JSON.stringify(JSON.parse(multiline));
+//return multiline;</params>
+                                </step>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.State</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1h</params>
+                                </step>
+                            </preprocessing>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{regexp(Normal)}=0</expression>
+                                    <name>DHCP Server Failover Server Relationship has reported a state Change {#NAME}</name>
+                                    <url>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.FailoverServerWatcher.UnitMonitor.State&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</url>
+                                    <priority>AVERAGE</priority>
+                                    <description>Failover Relationship named &quot;{#NAME}&quot; in defined between Server: &quot;{HOST.NAME}&quot; and Partner Server: &quot;{#PARTNERSERVER}&quot; for Scope ID: &quot;{3}&quot; changed its state to &quot;{4}&quot;</description>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#NAME}</lld_macro>
+                            <path>$.Name</path>
+                        </lld_macro_path>
+                        <lld_macro_path>
+                            <lld_macro>{#PARTNERSERVER}</lld_macro>
+                            <path>$.PartnerServer</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <params>var multiline = value;
+var lines = multiline.replace(/\r\n/g,'\n').replace(/\n\n/g,'\n').split('\n');
+lines.splice(0,7);
+lines.splice(-4);
+var multiline = '[' + lines.join('\n') + '\n}]';
+var multiline = multiline.replace(/instance of DhcpServerv4Failover/g,'').replace(/\t/g,'\&quot;').replace(/ = /g,'\&quot;:\&quot;').replace(/;/g,'\&quot;,').replace(/\&quot;\&quot;/g,'\&quot;').replace(/,\n\}/g,'\n\}').replace(/\&quot;\{/g,'\[').replace(/\}\&quot;/g,'\]');
+return JSON.stringify(JSON.parse(multiline));
+//return multiline;</params>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Windows Server DHCP IPv4 Scope</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;wmic /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4Scope Call Get&quot;]</key>
+                    <delay>1d</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DHCP Server IPv4 Scope Addresses Available {#4I}</name>
+                            <type>DEPENDENT</type>
+                            <key>dhcpv4.addressesavailable[{#4I}]</key>
+                            <delay>0</delay>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.IndScope.IPV4.FreeScopeAddresses.Quantity.Monitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</description>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server IPv4 Scope</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.AddressesFree</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1d</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;wmic  /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4ScopeStatistics Call Get ScopeID={#4I}&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;={$SCOMMPDHCP_IPV4S_ARDFREE_ERR_TH}</expression>
+                                    <name>DHCP Server IPv4 Scope Available Addresses are Low {#4I}</name>
+                                    <url>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.IndScope.IPV4.FreeScopeAddresses.Quantity.Monitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</url>
+                                    <status>DISABLED</status>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;={$SCOMMPDHCP_IPV4S_ARDFREE_WARN_TH}</expression>
+                                    <name>DHCP Server IPv4 Scope Available Addresses are Low {#4I}</name>
+                                    <status>DISABLED</status>
+                                    <priority>WARNING</priority>
+                                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.IndScope.IPV4.FreeScopeAddresses.Quantity.Monitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</description>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DHCP Server IPv4 Scope Addresses In Use {#4I}</name>
+                            <type>DEPENDENT</type>
+                            <key>dhcpv4.addressesused[{#4I}]</key>
+                            <delay>0</delay>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.Scope.IPV4.CollectIndividualScopeAddressesInUse&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</description>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server IPv4 Scope</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.AddressesInUse</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1w</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;wmic  /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4ScopeStatistics Call Get ScopeID={#4I}&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DHCP Server IPv4 Scope Percentage In Use {#4I}</name>
+                            <type>DEPENDENT</type>
+                            <key>dhcpv4.percentageinuse[{#4I}]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server IPv4 Scope</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.PercentageInUse</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1d</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;wmic  /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4ScopeStatistics Call Get ScopeID={#4I}&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;{$SCOMMPDHCP_IPV4S_PRECFREE_TH}</expression>
+                                    <name>DHCP Server IPv4 Available Addresses are Low {#4I}</name>
+                                    <url>https://systemcenter.wiki/?GetElement=Microsoft.Windows.DHCPServer.10.0.AllIndScope.IPV4.FreeScopeAddresses.Percentage.Monitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.DHCPServer.2016&amp;Version=10.1.0.0</url>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DHCP Server IPv4 Scope Data {#4I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;wmic  /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv4ScopeStatistics Call Get ScopeID={#4I}&quot;]</key>
+                            <delay>15m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server IPv4 Scope</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <params>var multiline = value;
+var lines = multiline.replace(/\r\n/g,'\n').replace(/\n\n/g,'\n').split('\n');
+lines.splice(0,7);
+lines.splice(-4);
+var multiline = lines.join('\n') + '\n}';
+var multiline = multiline.replace(/\t/g,'\&quot;').replace(/ = /g,'\&quot;:\&quot;').replace(/;/g,'\&quot;,').replace(/\&quot;\&quot;/g,'\&quot;').replace(/,\n\}/g,'\n\}');
+//var json = JSON.parse(multiline);
+return JSON.stringify(JSON.parse(multiline));
+//return multiline;</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1d</params>
+                                </step>
+                            </preprocessing>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#4I}</lld_macro>
+                            <path>$.ScopeId</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <params>var multiline = value;
+var lines = multiline.replace(/\r\n/g,'\n').replace(/\n\n/g,'\n').split('\n');
+lines.splice(0,7);
+lines.splice(-4);
+var multiline = '[' + lines.join('\n') + '\n}]';
+var multiline = multiline.replace(/instance of DhcpServerv4Scope/g,'').replace(/\t/g,'\&quot;').replace(/ = /g,'\&quot;:\&quot;').replace(/;/g,'\&quot;,').replace(/\&quot;\&quot;/g,'\&quot;').replace(/,\n\}/g,'\n\}');
+return JSON.stringify(JSON.parse(multiline));
+//return multiline;</params>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Windows Server DHCP IPv6 Scope</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;wmic /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv6Scope Call Get&quot;]</key>
+                    <delay>1d</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DHCP Server IPv6 Scope Data {#PREFIX}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;wmic /namespace:\\ROOT\Microsoft\Windows\DHCP Path PS_DhcpServerv6ScopeStatistics Call Get Prefix={#PREFIX&quot;]</key>
+                            <delay>15m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>DHCP Server IPv6 Scope</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <params>var multiline = value;
+var lines = multiline.replace(/\r\n/g,'\n').replace(/\n\n/g,'\n').split('\n');
+lines.splice(0,7);
+lines.splice(-4);
+var multiline = lines.join('\n') + '\n}';
+var multiline = multiline.replace(/\t/g,'\&quot;').replace(/ = /g,'\&quot;:\&quot;').replace(/;/g,'\&quot;,').replace(/\&quot;\&quot;/g,'\&quot;').replace(/,\n\}/g,'\n\}');
+//var json = JSON.parse(multiline);
+return JSON.stringify(JSON.parse(multiline));
+//return multiline;</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>1h</params>
+                                </step>
+                            </preprocessing>
+                        </item_prototype>
+                    </item_prototypes>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#NAME}</lld_macro>
+                            <path>$.Name</path>
+                        </lld_macro_path>
+                        <lld_macro_path>
+                            <lld_macro>{#PREFIX}</lld_macro>
+                            <path>$.Prefix</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <params>var multiline = value;
+var lines = multiline.replace(/\r\n/g,'\n').replace(/\n\n/g,'\n').split('\n');
+lines.splice(0,7);
+lines.splice(-4);
+var multiline = '[' + lines.join('\n') + '\n}]';
+var multiline = multiline.replace(/instance of DhcpServerv6Scope/g,'').replace(/\t/g,'\&quot;').replace(/ = /g,'\&quot;:\&quot;').replace(/;/g,'\&quot;,').replace(/\&quot;\&quot;/g,'\&quot;').replace(/,\n\}/g,'\n\}');
+return JSON.stringify(JSON.parse(multiline));
+//return multiline;</params>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$SCOMMPDHCP_IPV4S_ARDFREE_ERR_TH}</macro>
+                    <value>10</value>
+                    <description>IPv4 Scope Free Address Count Error Threshold</description>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPDHCP_IPV4S_ARDFREE_WARN_TH}</macro>
+                    <value>50</value>
+                    <description>IPv4 Scope Free Address Count Warning Threshold</description>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPDHCP_IPV4S_PRECFREE_TH}</macro>
+                    <value>90</value>
+                    <description>IPv4 Scope Free Percent Threshold</description>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>

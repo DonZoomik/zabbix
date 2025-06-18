@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:45:42Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Hitachi VSP SNMP Trap</template>
+            <name>Hitachi VSP SNMP Trap</name>
+            <description>Throw alert on trap</description>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <name>SNMP Trap</name>
+                    <type>SNMP_TRAP</type>
+                    <key>snmptrap[]</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>Hitachi SNMP Event</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+</zabbix_export>

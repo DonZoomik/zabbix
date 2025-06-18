@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:47:39Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>SCOM MP Microsoft SQL Server</template>
+            <name>SCOM MP Microsoft SQL Server</name>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Microsoft SQL Server</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Create maintenance root</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;mkdir c:\SQLM&quot;]</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>Microsoft SQL Server</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Download Ola Hallengren SQL Script and modify</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $f='c:\SQLM\SQLM.sql';invoke-webrequest -Ur 'https://ola.hallengren.com/scripts/MaintenanceSolution.sql' -O $f;$c=gc $f;$c^|%{$_ -replace 'SET @CreateJobs.+','SET @CreateJobs=''N'''}^|sc $f -Enc Unicode&quot;]</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <status>DISABLED</status>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>Microsoft SQL Server</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Detect SQLPS module</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell try{import-module sqlps -WarningAction SilentlyContinue -ErrorAction stop;0}catch{1}]</key>
+                    <delay>1d</delay>
+                    <applications>
+                        <application>
+                            <name>Microsoft SQL Server</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=1</expression>
+                            <name>SQLPS module missing</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Discover SQL Server Instances</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $d='MSSQLSERVER';$l=@{};$b='MSSQL$';{$SCOMMPSQLDBWIDDEF}.GetEnumerator()^|{$SCOMMPSQLDBWPA};{$SCOMMPSQLDBLISTI}^|{$SCOMMPSQLDBIPA};@{data=@($l.GetEnumerator()^|%{{$SCOMMPSQLDBIJS}})}^|convertto-json&quot;]</key>
+                    <delay>1d</delay>
+                    <lifetime>0</lifetime>
+                    <description>Prev 20180409:&#13;
+system.run[powershell $h=^&amp;hostname;@{data=@({$SCOMMPSQLDBLISTI}^|?{$_-ne'MICROSOFT##SSEE'}^|%{if($_){if($_-eq'MSSQLSERVER'){$i=$s=$_;$c=$h}else{$s='MSSQL$'+$_;$i=$_;$c=($h+'\'+$i)};@{'{#I}'=$i;'{#C}'=$c;'{#S}'=$s}}})}^|ConvertTo-Json]</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>SQL Server Buffer Cache Hit Ratio {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\{#P}:Buffer Manager\Buffer Cache Hit Ratio&quot;,300]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Buffer Page Life Expectancy {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\{#P}:Buffer Manager\Page Life Expectancy&quot;,300]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>s</units>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Average Wait Time {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\{#P}:Locks(_Total)\Average Wait Time (ms)&quot;,300]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>ms</units>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server SQL Re-Compilation {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\{#P}:SQL Statistics\SQL Re-Compilations/sec&quot;,300]</key>
+                            <delay>5m</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Database Service Status {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>service.info[{#S}]</key>
+                            <delay>5m</delay>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>Windows service state</name>
+                            </valuemap>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;&gt;0</expression>
+                                    <name>SQL Server Instance {#I} is not running</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server DBCC CHECKDB Script {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;echo powershell invoke-sqlcmd -ser {#C} -Query 'sp_msforeachdb ''DBCC checkdb ([?]) with EXTENDED_LOGICAL_CHECKS,DATA_PURITY''' -queryt 0 &gt; c:\SQLM\DBCC{#I}.bat&quot;]</key>
+                            <delay>1d</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server DBCC CHECKDB Schedule {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[schtasks /create /RU SYSTEM /SC Daily /ST 00:00 /TN DBCC{#I} /TR 'c:\SQLM\DBCC{#I}.bat' /f]</key>
+                            <delay>1d</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Discover SQL Server Databases</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell {$SCOMMPSQLDBC};{$SCOMMPSQLDBWIDDEF}.GetEnumerator()^|{$SCOMMPSQLDBWPA};{$SCOMMPSQLDBLISTI}^|{$SCOMMPSQLDBIPA};@{data=@($l.GetEnumerator()^|%{$i=$_.key;$c=$_.value;{$SCOMMPSQLDBGETDB}^|{$SCOMMPSQLDBDBJS}})}^|convertto-json&quot;]</key>
+                    <delay>1d</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#D}</macro>
+                                <value>@MSSQL tempdb</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>0</lifetime>
+                    <description>Old 20180409:&#13;
+system.run[powershell $h=^&amp;hostname;@{data=@({$SCOMMPSQLDBLISTI}^|?{$_}^|%{If($_-eq'MSSQLSERVER'){$h}else{$h+'\'+$_}}^|%{$c=$_;(Invoke-Sqlcmd -Ser $c -Query {$SCOMMPSQLDBGETDB}).name}^|?{$_-ne'tempdb'}^|%{@{'{#C}'=$c;'{#D}'=$_}})}^|ConvertTo-Json]</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>SQL Server Database DBCC CHECKDB Errors {#I} {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell ((Invoke-Sqlcmd -ser {#C} -Query {$SCOMMPSQLDBDBCCR1}{#D}{$SCOMMPSQLDBDBCCR2}).T -split 'found^|errors')[1].trim()&quot;]</key>
+                            <delay>1d</delay>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;&gt;0</expression>
+                                    <name>SQL Server DBCC CHECKDB has errors {#I} {#D}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Database Last Consistency Check {#I} {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell (new-timespan -start ([datetime](Invoke-Sqlcmd -Ser {#C} -Query {$SCOMMPSQLDBDBCC1}{#D}{$SCOMMPSQLDBDBCC2}).value)).days&quot;]</key>
+                            <delay>1d</delay>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;14</expression>
+                                    <name>SQL Server Database DBCC CHECKDB not recently run {#I} {#D}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Database Last Backed Up {#I} {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell (new-timespan -start ([datetime](Invoke-Sqlcmd -Ser {#C} -Query {$SCOMMPSQLDBLBCKP}{#D}'' order by backup_finish_date desc').backup_finish_date)).days&quot;]</key>
+                            <delay>1d</delay>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&gt;7</expression>
+                                    <name>SQL Server Database Not Recently Backed Up {#I} {#D}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Database Engine Edition {#I} {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[powershell (Invoke-Sqlcmd -Ser {#C} -query 'select serverproperty(''Edition'')').Column1#{#D}]</key>
+                            <delay>1d</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <description>As we need this for database based trigger, we must query it for each database. We can't cross-reference it from instance discovery...</description>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SQL Server Database Data Size {#I} {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[powershell (Invoke-Sqlcmd -Ser {#C} -query sp_helpdb^|? name -eq '{#D}').db_size.trim('MB').trim()]</key>
+                            <delay>1d</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <description>Data only, no logs.</description>
+                            <applications>
+                                <application>
+                                    <name>Microsoft SQL Server</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <params>1048576</params>
+                                </step>
+                            </preprocessing>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{SCOM MP Microsoft SQL Server:system.run[powershell (Invoke-Sqlcmd -Ser {#C} -query 'select serverproperty(''Edition'')').Column1#{#D}].str(Express)}=1 and {SCOM MP Microsoft SQL Server:system.run[powershell (Invoke-Sqlcmd -Ser {#C} -query sp_helpdb^|? name -eq '{#D}').db_size.trim('MB').trim()].last()}&gt;10200547328</expression>
+                            <name>SQL Express Edition Database is nearly full {#I} {#D}</name>
+                            <priority>AVERAGE</priority>
+                            <description>Express max size is 10GB, trigger at 9,5GB</description>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$SCOMMPSQLDBC}</macro>
+                    <value>$d='MSSQLSERVER';$l=@{};$b='MSSQL$'</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBDBCC1}</macro>
+                    <value>'CREATE TABLE #ZEDC1(ParentObject VarChar(99),Object VarChar(99),Field VarChar(99),Value VarChar(99));INSERT #ZEDC1 EXEC(''DBCC DBINFO(''''</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBDBCC2}</macro>
+                    <value>'''')WITH TABLERESULTS,NO_INFOMSGS'');select value from #ZEDC1 where field=''dbi_dbccLastKnownGood'';DROP TABLE #ZEDC1'</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBDBCCR1}</macro>
+                    <value>'Create Table #ZEDC2(L datetime,P varchar(100),T varchar(500));Insert #ZEDC2 exec sp_readerrorlog 0,1,''DBCC CHECKDB (</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBDBCCR2}</macro>
+                    <value>)'';select top 1 T from #ZEDC2 order by L desc;drop table #ZEDC2'</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBDBJS}</macro>
+                    <value>%{@{'{#I}'=$i;'{#C}'=$c;'{#D}'=$_.trim()}}</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBEDIC}</macro>
+                    <value>'EXECUTE dbo.DatabaseIntegrityCheck @Databases=''ALL_DATABASES'',@CheckCommands=''CHECKDB'',@ExtendedLogicalChecks=''Y'''</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBGETDB}</macro>
+                    <value>(Invoke-Sqlcmd -Ser $c -Query 'SET NOCOUNT ON SELECT name FROM master.dbo.sysdatabases').name</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBIJS}</macro>
+                    <value>@{'{#I}'=$_.Key;'{#C}'=$_.Value;'{#P}'=$(If($_.Key-eq$d){'SQLServer'}else{$b+$_.Key});'{#S}'=$(If($_.Key-eq$d){$d}else{$b+$_.Key})}</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBIPA}</macro>
+                    <value>%{If($_){$l.add($_,('lpc:'+(^&amp;hostname)+$(If($_-eq$d){}else{'\'+$_})))}}</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBLBCKP}</macro>
+                    <value>'SELECT top 1 backup_finish_date FROM msdb.dbo.backupset where database_name=''</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBLISTI}</macro>
+                    <value>(gp 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server'2^&gt;$nul).InstalledInstances</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBWIDDEF}</macro>
+                    <value>@{'MICROSOFT##SSEE'='np:\\.\pipe\MSSQL$MICROSOFT##SSEE\sql\query';'MICROSOFT##WID'='np:\\.\pipe\MICROSOFT##WID\tsql\query'}</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPSQLDBWPA}</macro>
+                    <value>%{if(gsv($b+$_.Key)2^&gt;$nul){$l.add($_.key,$_.Value)}}</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+    <value_maps>
+        <value_map>
+            <name>Windows service state</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Running</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Paused</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>Start pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>Pause pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>Continue pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>5</value>
+                    <newvalue>Stop pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>6</value>
+                    <newvalue>Stopped</newvalue>
+                </mapping>
+                <mapping>
+                    <value>7</value>
+                    <newvalue>Unknown</newvalue>
+                </mapping>
+                <mapping>
+                    <value>255</value>
+                    <newvalue>No such service</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:42:25Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Custom Windows Certificate Expire check</template>
+            <name>Custom Windows Certificate Expire check</name>
+            <description>Detects HTTP.sys listeners.&#13;
+For custom checks, modify macro CustomCertificateArray. It must be in PowerShell array syntax, each array member is semicolon separated string such as 'hostname,port,SNI', where hostname is check target (IP or hostname, either short or FQDN), portname is target port, SNI is server's expected hostname as some servers refuse connection without it. Parameter strings must use single quotes (').&#13;
+Keep in mind that it works mostly in local machine context, eg all checks are local and mostly initiated by agent.</description>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Certificate check HTTP listener</name>
+                </application>
+                <application>
+                    <name>Custom TLS Listener</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Custom TLS Listener Discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell @{data=@({$WINCERTCHECKCUSTOMCERTIFICATEARRAY}^|%{$b=$_ -split ';';@{'{#H}'=$b[0];'{#P}'=$b[1];'{#S}'=$b[2]}})}^|convertto-json&quot;]</key>
+                    <delay>1h</delay>
+                    <lifetime>1d</lifetime>
+                    <description>Keep in mind that you must populate {$WINCERTCHECKCUSTOMCERTIFICATEARRAY} to show results</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>TLS Listener Certificate expire in days {#H} {#P} {#S}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell {$WINCERTCHECKCUSTOMHELPER1}{#H}',{#P}{$WINCERTCHECKCUSTOMHELPER2}{#S}{$WINCERTCHECKCUSTOMHELPER3}&quot;]</key>
+                            <delay>1h</delay>
+                            <applications>
+                                <application>
+                                    <name>Custom TLS Listener</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;30</expression>
+                                    <name>Custom TLS listener certificate expires in less than 30 days {#H} {#P} {#S}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>HTTP.sys listener discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell {$WINCERTCHECKNETSHHELPER}@{'{#C}'=$_.line.Split(':')[1].trim();'{#H}'=if($6){$6}else{$p[2].trim()};'{#P}'=$p[3].trim()}})}^|convertto-json&quot;]</key>
+                    <delay>1h</delay>
+                    <lifetime>1d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Listener Certificate Expire Days {#H} {#P} {#C}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[powershell (new-timespan -end ((gi Cert:\LocalMachine\my\{#C}).notafter)).days #{#H} {#P}]</key>
+                            <delay>1h</delay>
+                            <applications>
+                                <application>
+                                    <name>Certificate check HTTP listener</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;30</expression>
+                                    <name>HTTP.sys listener certificate expires in less than 30 days {#H} {#P} {#C}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$WINCERTCHECKCUSTOMCERTIFICATEARRAY}</macro>
+                    <value>@()</value>
+                </macro>
+                <macro>
+                    <macro>{$WINCERTCHECKCUSTOMHELPER1}</macro>
+                    <value>$c=(New-Object System.Net.Security.SslStream((New-Object Net.Sockets.TcpClient('</value>
+                </macro>
+                <macro>
+                    <macro>{$WINCERTCHECKCUSTOMHELPER2}</macro>
+                    <value>)).GetStream()),$false,([System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}));$c.AuthenticateAsClient('</value>
+                </macro>
+                <macro>
+                    <macro>{$WINCERTCHECKCUSTOMHELPER3}</macro>
+                    <value>');(new-timespan -end ((New-Object system.security.cryptography.x509certificates.x509certificate2($c.RemoteCertificate)).NotAfter)).days</value>
+                </macro>
+                <macro>
+                    <macro>{$WINCERTCHECKNETSHHELPER}</macro>
+                    <value>@{data=@(netsh http show sslcert^|sls 'hash' -co 1,0^|%{$p=$_.context.precontext;$6=$nul;if($p -match '\['){$6=$p.split('[]')[1];$p=$p.replace($6,'').split(':')}else{$p=$p.split(':')}</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>

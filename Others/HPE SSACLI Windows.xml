@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:46:11Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>HPE SSACLI Windows</template>
+            <name>HPE SSACLI Windows</name>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>HPE RAID</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Controller Discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell @{data=@(^&amp;'C:\Program Files\Smart Storage Administrator\ssacli\bin\ssacli.exe' ctrl all show status^|sls slot^|%{($_.line -split 'slot')[1].trim().split(' ')[0]}^|%{@{'{#I}'=$_}})}^|convertto-json&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Controllery Battery Status {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell ((^&amp;'C:\Program Files\Smart Storage Administrator\ssacli\bin\ssacli.exe' ctrl slot={#I} show status).trim()^|sls battery).line.split(':')[1].trim()&quot;]</key>
+                            <delay>15m</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(OK)}=0</expression>
+                                    <name>Controller Battery Degraded {#I}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Controller Cache Status {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell ((^&amp;'C:\Program Files\Smart Storage Administrator\ssacli\bin\ssacli.exe' ctrl slot={#I} show status).trim()^|sls cache).line.split(':')[1].trim()&quot;]</key>
+                            <delay>15m</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(OK)}=0</expression>
+                                    <name>Controller Cache Degraded {#I}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Controller Status {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell ((^&amp;'C:\Program Files\Smart Storage Administrator\ssacli\bin\ssacli.exe' ctrl slot={#I} show status).trim()^|sls controller).line.split(':')[1].trim()&quot;]</key>
+                            <delay>15m</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(OK)}=0</expression>
+                                    <name>Controller Status Degraded {#I}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Controller Name {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell ((^&amp;'C:\Program Files\Smart Storage Administrator\ssacli\bin\ssacli.exe' ctrl slot={#I} show status).trim()^|sls slot).line.trim()&quot;]</key>
+                            <delay>15m</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Drive Cage Discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell @{data=@(^{$HPESSACLI_CMD}^|sls 'drive cage'^|%{($_.line.trim()).split(',')[0].trim()}^|%{@{'{#I}'=$_}})}^|convertto-json&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Drive Cage Name {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[drivecagename,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.name</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split(',').trim();@{'name'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Drive cage Status {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[drivecagestsatus,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.status</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split(',').trim();@{'name'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(OK)}=0</expression>
+                                    <name>Drive Cage Degraded {#I}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Drive Cage Query {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split(',').trim();@{'name'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            <delay>15m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Logical Drive Discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell @{data=@(^{$HPESSACLI_CMD}^|sls 'logicaldrive'^|%{@{'{#I}'=$_.line.split('(').trim()[0]}})}^|convertto-json&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Logical Drive Capacity {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[logicaldrivecapacity,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.capacity</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'capacity'=$r[0];'type'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Logical Drive Status {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[logicaldrivestatus,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.status</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'capacity'=$r[0];'type'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(OK)}=0</expression>
+                                    <name>Logical Drive Degraded {#I}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Logical Drive Type {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[logicaldrivetype,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.type</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'capacity'=$r[0];'type'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Logical Drive Query {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'capacity'=$r[0];'type'=$r[1];'status'=$r[2]})}^|convertto-json&quot;]</key>
+                            <delay>15m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Physical Disk Discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell @{data=@(^{$HPESSACLI_CMD}^|sls 'physicaldrive'^|%{@{'{#I}'=$_.line.split('(').trim()[0]}})}^|convertto-json&quot;]</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Physical Drive Capacity {{#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[physicaldrivecapacity,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.capacity</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'location'=$r[0];'type'=$r[1];'capacity'=$r[2];;'status'=$r[3]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Physical Drive Location {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[physicaldrivelocation,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.location</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'location'=$r[0];'type'=$r[1];'capacity'=$r[2];;'status'=$r[3]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Physical Drive Status {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[physicaldrivestatus,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.status</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'location'=$r[0];'type'=$r[1];'capacity'=$r[2];;'status'=$r[3]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(OK)}=0</expression>
+                                    <name>Physical Drive Degraded {#I}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Physical Drive Type {#I}</name>
+                            <type>DEPENDENT</type>
+                            <key>ssacli[physicaldrivetype,&quot;{#I}&quot;]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.data.type</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'location'=$r[0];'type'=$r[1];'capacity'=$r[2];;'status'=$r[3]})}^|convertto-json&quot;]</key>
+                            </master_item>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Physical Drive Query {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell @{data=$($r=(^{$HPESSACLI_CMD}^|sls '{#I}').line.split('()')[1].split(',').trim();@{'location'=$r[0];'type'=$r[1];'capacity'=$r[2];;'status'=$r[3]})}^|convertto-json&quot;]</key>
+                            <delay>15m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>HPE RAID</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$HPESSACLI_CMD}</macro>
+                    <value>&amp;'C:\Program Files\Smart Storage Administrator\ssacli\bin\ssacli.exe' ctrl all show config</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>

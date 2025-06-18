@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:48:15Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>SCOM MP Windows Server Active Directory</template>
+            <name>SCOM MP Windows Server Active Directory</name>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Active Directory</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Number of ATQ LDAP Threads</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>perf_counter[&quot;\NTDS\ATQ Threads LDAP&quot;,900]</key>
+                    <delay>15m</delay>
+                    <value_type>FLOAT</value_type>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Performance.Atq.AvgThreads.Monitor.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Number of ATQ Other Threads</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>perf_counter[&quot;\NTDS\ATQ Threads Other&quot;,900]</key>
+                    <delay>15m</delay>
+                    <value_type>FLOAT</value_type>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Performance.Atq.AvgThreads.Monitor.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Number of Logical Processors</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.cpu.num</key>
+                    <delay>15m</delay>
+                    <value_type>FLOAT</value_type>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>LDAP Bind Availability Non-SSL</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $d=((gwmi Win32_ComputerSystem).Domain+':389');try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$d/RootDSE\&quot;\&quot;\&quot;;if(! $r.servername){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.Bind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_LDAPBNS_NS})}&gt;0</expression>
+                            <name>LDAP Non-SSL Bind Failed</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>LDAP Bind Availability SSL</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $d=((gwmi Win32_ComputerSystem).Domain+':636');try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$d/RootDSE\&quot;\&quot;\&quot;;if(! $r.servername){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.Bind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_LDAPSSL_NS})}&gt;0</expression>
+                            <name>LDAP SSL Bind Failed</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Global Catalog Bind Availability Non-SSL</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $d=((gwmi Win32_ComputerSystem).Domain+':3268');try{$r=[ADSI]\&quot;\&quot;\&quot;GC://$d/RootDSE\&quot;\&quot;\&quot;;if(! $r.servername){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.GCResponse.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_GCBNSSL_NS})}&gt;0</expression>
+                            <name>Global Catalog Non-SSL Bind Failed</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Global Catalog Bind Availability SSL</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $d=((gwmi Win32_ComputerSystem).Domain+':3269');try{$r=[ADSI]\&quot;\&quot;\&quot;GC://$d/RootDSE\&quot;\&quot;\&quot;;if(! $r.servername){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>system.run[&quot;powershell $d=((gwmi Win32_ComputerSystem).Domain+':636');try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$d/RootDSE\&quot;\&quot;\&quot;;if(! $r.servername){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_GCBSSL_NS})}&gt;0</expression>
+                            <name>Global Catalog SSL Bind Failed</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DC Locator</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $d=new-object -com ADSystemInfo;If ((gwmi 'Win32_NetworkAdapterConfiguration').dnshostname -contains $d.GetAnyDCName().split('.')[0]){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.DCLocator.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_DCLOC_NS})}&gt;0</expression>
+                            <name>DC Locator failed</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Infrastructure Master Ping</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADDomain).InfrastructureMaster;(gwmi Win32_PingStatus -f \&quot;\&quot;\&quot;address=`'$m`'\&quot;\&quot;\&quot;).statuscode&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoPing.DataSource&amp;Type=DataSourceModuleType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOINFP_NS})}&lt;&gt;0</expression>
+                            <name>FSMO Infrastructure Master Ping Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Infrastructure Master Bind</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADDomain).InfrastructureMaster;try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$m/RootDSE\&quot;\&quot;\&quot;;if($r.dnshostname -ne $m){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoBind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOINFB_NS})}&gt;0</expression>
+                            <name>FSMO Infrastructure Master Bind Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO PDC Emulator Ping</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADDomain).PDCEmulator;(gwmi Win32_PingStatus -f \&quot;\&quot;\&quot;address=`'$m`'\&quot;\&quot;\&quot;).statuscode&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoPing.DataSource&amp;Type=DataSourceModuleType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOPDCP_NS})}&lt;&gt;0</expression>
+                            <name>FSMO PDC Emulator Ping Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO PDC Emulator Bind</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADDomain).PDCEmulator;try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$m/RootDSE\&quot;\&quot;\&quot;;if($r.dnshostname -ne $m){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoBind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOPDCB_NS})}&gt;0</expression>
+                            <name>FSMO PDC Emulator Bind Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO RID Master Ping</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADDomain).RIDMaster;;(gwmi Win32_PingStatus -f \&quot;\&quot;\&quot;address=`'$m`'\&quot;\&quot;\&quot;).statuscode&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoPing.DataSource&amp;Type=DataSourceModuleType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMORIDP_NS})}&lt;&gt;0</expression>
+                            <name>FSMO RID Master Ping Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO RID Master Bind</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADDomain).RIDMaster;try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$m/RootDSE\&quot;\&quot;\&quot;;if($r.dnshostname -ne $m){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoBind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMORIDB_NS})}&gt;0</expression>
+                            <name>FSMO RID Master Bind Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Domain Naming Master Ping</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADForest).DomainNamingMaster;(gwmi Win32_PingStatus -f \&quot;\&quot;\&quot;address=`'$m`'\&quot;\&quot;\&quot;).statuscode&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoPing.DataSource&amp;Type=DataSourceModuleType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMODNMP_NS})}&lt;&gt;0</expression>
+                            <name>FSMO Domain Naming Master Ping Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Domain Naming Master Bind</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADForest).DomainNamingMaster;try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$m/RootDSE\&quot;\&quot;\&quot;;if($r.dnshostname -ne $m){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoBind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMODNMB_NS})}&gt;0</expression>
+                            <name>FSMO Domain Naming Master Bind Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Schema Master Ping</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADForest).SchemaMaster;(gwmi Win32_PingStatus -f \&quot;\&quot;\&quot;address=`'$m`'\&quot;\&quot;\&quot;).statuscode&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoPing.DataSource&amp;Type=DataSourceModuleType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOSCHP_NS})}&lt;&gt;0</expression>
+                            <name>FSMO Schema Master Ping Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Schema Master Bind</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $m=(Get-ADForest).SchemaMaster;try{$r=[ADSI]\&quot;\&quot;\&quot;LDAP://$m/RootDSE\&quot;\&quot;\&quot;;if($r.dnshostname -ne $m){throw '1'}else{0}}catch{$error.fullyqualifiederrorid}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.FsmoBind.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOSCHB_NS})}&gt;0</expression>
+                            <name>FSMO Schema Master Bind Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Infrastructure Master Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $p=(Get-ADDomain).PDCEmulator;If((Get-ADDomain -S $p).InfrastructureMaster -eq (Get-ADDomain -S localhost).InfrastructureMaster){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.FsmoHolders.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOINFC_NS})}&gt;0</expression>
+                            <name>FSMO Infrastructure Master Inconsistency</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO RID Master Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell  $p=(Get-ADDomain).PDCEmulator;If((Get-ADDomain -S $p).RIDMaster -eq (Get-ADDomain -S localhost).RIDMaster){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.FsmoHolders.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMORIDC_NS})}&gt;0</expression>
+                            <name>FSMO RID Master Inconsistency</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Domain Naming Master Bind Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $p=(Get-ADDomain).PDCEmulator;If((Get-ADForest -S $p).DomainNamingMaster -eq (Get-ADForest -S localhost).DomainNamingMaster){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.FsmoHolders.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMODNMC_NS})}&gt;0</expression>
+                            <name>FSMO Domain Naming Master Inconsistency</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>FSMO Schema Master Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $p=(Get-ADDomain).PDCEmulator;If((Get-ADForest -S $p).SchemaMaster -eq (Get-ADForest -S localhost).SchemaMaster){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.FsmoHolders.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_FSMOSCHC_NS})}&gt;0</expression>
+                            <name>FSMO Schema Master Inconsistency</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>AD Replication Number of sitewide outbound replications to other sites</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $q={$SCOMMPWSAS_DCSITEDN_HELPER};(get-adobject -L {$SCOMMPWSAS_NTDSC_HLP} -Searchb (Get-ADRootDSE).configurationNamingContext -pr fromserver^|? fromserver -match $q^|? distinguishedname -notmatch $q^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>AD Replication Number of outbound replications in site</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $s=([ADSI]'LDAP://RootDSE').ServerName;(get-adobject -L \&quot;\&quot;\&quot;(&amp;(objectCategory=nTDSConnection)(fromServer=CN=NTDS Settings,$s)(|(!(Name=*DEL*))(!(Name=*CNF*))))\&quot;\&quot;\&quot; -Searchb {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Group Policy refresh</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $t=(measure-command{$r=saps gpupdate -wai -pa -wi hidden}).totalseconds;if($t -lt 30 -and $r.Exitcode -eq 0){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.GroupPolicy.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;0</expression>
+                            <name>Group Policy Refresh Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Strict replication consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell $v=(gp 'HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters').'Strict Replication Consistency';If($v){$v}else{0}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.ReplicationConsistency.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_SREPLCON_NS})}&lt;&gt;1</expression>
+                            <name>Strict replication consistency disabled</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>AD Replication Number of inbound replications in site</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (get-adobject -L '(^&amp;(objectCategory=nTDSConnection)(^|(!(Name=*DEL*))(!(Name=*CNF*))))' -Searchb ([ADSI]'LDAP://RootDSE').ServerName.tostring() -pr fromserver^|? fromserver -match {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>AD Replication Number of sitewide inbound replications from other sites</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (get-adobject -L '(^&amp;(objectCategory=nTDSConnection)(^|(!(Name=*DEL*))(!(Name=*CNF*))))' -Searchb {$SCOMMPWSAS_DCSITEDN_HELPER} -pr fromserver^|? fromserver -notmatch {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>AD Replication number of DCs in domain</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-AdObject -LD 'objectclass=server' -SearchBase ('CN=Sites,'+(Get-ADRootDSE).configurationNamingContext)^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.ReplicationPartnerCount.DataSource&amp;Type=DataSourceModuleType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;2</expression>
+                            <name>Too few DCs in domain</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>AD Replication number of DCs in site</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-AdObject -LD 'objectclass=server' -SearchBase {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>AD Replication number of sites with DCs in domain</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-AdObject -LD 'objectclass=site' -SearchBa ('CN=Sites,'+(Get-ADRootDSE).configurationNamingContext)^|%{If(Get-AdObject -SearchBa $_.Distinguishedname -LD 'objectclass=server'){$_}}^|select -u^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>AD Number of Lost And Found objects</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (get-adobject -searchbase (get-addomain).lostandfoundcontainer -f *^|measure).count&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.LostObjectCount.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;1</expression>
+                            <name>Domain has LostAndFound objects</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DNS Server Connectivity</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (gip).DNSServer.serveraddresses^|select -u^|%{If((gwmi Win32_PingStatus -f \&quot;\&quot;\&quot;address='$_'\&quot;\&quot;\&quot;).statuscode -ne 0){$e=1}};if($e){1}else{0}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Configuration.NetworkAdapters.DNS.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;0</expression>
+                            <name>DNS Server Connectivity Failed</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>SYSVOL Availability</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell if(gwmi win32_share -f 'name=''sysvol'''){0}else{1}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.SysVol.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_SYSCVOLS_NS})}&gt;0</expression>
+                            <name>SYSVOL is not shared</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>AD Replication check</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell if(repadmin /showrepl /errorsonly /csv^|convertfrom-csv){1}else{0}&quot;]</key>
+                    <delay>15m</delay>
+                    <description>http://systemcentercore.com/?GetElement=Microsoft.Windows.Server.2016.AD.Availability.ReplicationShowReplCheck.Monitortype&amp;Type=UnitMonitorType&amp;ManagementPack=Microsoft.Windows.Server.AD.2016.Monitoring&amp;Version=10.0.2.1</description>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{min({$SCOMMPWSAD_ADREPL_NS})}&gt;0</expression>
+                            <name>Active Directory Replication Failed</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>AD Read-only DC</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell If((Get-ADDomainController).isreadonly){1}else{0}]</key>
+                    <delay>15m</delay>
+                    <applications>
+                        <application>
+                            <name>Active Directory</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>BOOL_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <request_method>POST</request_method>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$SCOMMPWSAD_ADREPL_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_DCLOC_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMODNMB_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMODNMC_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMODNMP_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOINFB_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOINFC_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOINFP_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOPDCB_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOPDCP_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMORIDB_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMORIDC_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMORIDP_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOSCHB_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOSCHC_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_FSMOSCHP_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_GCBNSSL_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_GCBSSL_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_LDAPBNS_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_LDAPSSL_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_SREPLCON_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAD_SYSCVOLS_NS}</macro>
+                    <value>#2</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAS_DCSITEDN_HELPER}</macro>
+                    <value>&quot;&quot;&quot;CN=$((Get-ADDomainController).site),CN=Sites,$((Get-ADRootDSE).configurationNamingContext)&quot;&quot;&quot;</value>
+                </macro>
+                <macro>
+                    <macro>{$SCOMMPWSAS_NTDSC_HLP}</macro>
+                    <value>'(^&amp;(objectCategory=nTDSConnection)(^|(!(Name=*DEL*))(!(Name=*CNF*))))'</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <expression>{SCOM MP Windows Server Active Directory:system.run[&quot;powershell (Get-AdObject -LD 'objectclass=server' -SearchBase {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;].last()}&gt;1 and {SCOM MP Windows Server Active Directory:system.run[&quot;powershell (get-adobject -L '(^&amp;(objectCategory=nTDSConnection)(^|(!(Name=*DEL*))(!(Name=*CNF*))))' -Searchb ([ADSI]'LDAP://RootDSE').ServerName.tostring() -pr fromserver^|? fromserver -match {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;].last()}=0</expression>
+            <name>AD Replication No inbound in-site replication links</name>
+            <priority>AVERAGE</priority>
+        </trigger>
+        <trigger>
+            <expression>{SCOM MP Windows Server Active Directory:system.run[&quot;powershell (Get-AdObject -LD 'objectclass=site' -SearchBa ('CN=Sites,'+(Get-ADRootDSE).configurationNamingContext)^|%{If(Get-AdObject -SearchBa $_.Distinguishedname -LD 'objectclass=server'){$_}}^|select -u^|measure).count&quot;].last()}&gt;1 and {SCOM MP Windows Server Active Directory:system.run[&quot;powershell (get-adobject -L '(^&amp;(objectCategory=nTDSConnection)(^|(!(Name=*DEL*))(!(Name=*CNF*))))' -Searchb {$SCOMMPWSAS_DCSITEDN_HELPER} -pr fromserver^|? fromserver -notmatch {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;].last()}&lt;1</expression>
+            <name>AD Replication No inbound intersite replication links</name>
+            <priority>AVERAGE</priority>
+        </trigger>
+        <trigger>
+            <expression>{SCOM MP Windows Server Active Directory:system.run[powershell If((Get-ADDomainController).isreadonly){1}else{0}].last()}=0 and {SCOM MP Windows Server Active Directory:system.run[&quot;powershell (Get-AdObject -LD 'objectclass=server' -SearchBase {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;].last()}&gt;0 and {SCOM MP Windows Server Active Directory:system.run[&quot;powershell $s=([ADSI]'LDAP://RootDSE').ServerName;(get-adobject -L \&quot;\&quot;\&quot;(&amp;(objectCategory=nTDSConnection)(fromServer=CN=NTDS Settings,$s)(|(!(Name=*DEL*))(!(Name=*CNF*))))\&quot;\&quot;\&quot; -Searchb {$SCOMMPWSAS_DCSITEDN_HELPER}^|measure).count&quot;].last()}&lt;0</expression>
+            <name>AD Replication No outbound in-site replication links</name>
+            <priority>AVERAGE</priority>
+        </trigger>
+        <trigger>
+            <expression>{SCOM MP Windows Server Active Directory:system.run[powershell If((Get-ADDomainController).isreadonly){1}else{0}].last()}=1 and {SCOM MP Windows Server Active Directory:system.run[&quot;powershell (Get-AdObject -LD 'objectclass=site' -SearchBa ('CN=Sites,'+(Get-ADRootDSE).configurationNamingContext)^|%{If(Get-AdObject -SearchBa $_.Distinguishedname -LD 'objectclass=server'){$_}}^|select -u^|measure).count&quot;].last()}&gt;1 and {SCOM MP Windows Server Active Directory:system.run[&quot;powershell $q={$SCOMMPWSAS_DCSITEDN_HELPER};(get-adobject -L {$SCOMMPWSAS_NTDSC_HLP} -Searchb (Get-ADRootDSE).configurationNamingContext -pr fromserver^|? fromserver -match $q^|? distinguishedname -notmatch $q^|measure).count&quot;].last()}=0</expression>
+            <name>AD Replication No outbound intersite replication links</name>
+            <priority>AVERAGE</priority>
+        </trigger>
+        <trigger>
+            <expression>(&#13;
+{SCOM MP Windows Server Active Directory:perf_counter[&quot;\NTDS\ATQ Threads LDAP&quot;,900].last()} + &#13;
+{SCOM MP Windows Server Active Directory:perf_counter[&quot;\NTDS\ATQ Threads Other&quot;,900].last()}&#13;
+)&gt;(&#13;
+{SCOM MP Windows Server Active Directory:system.cpu.num.last()}*4)</expression>
+            <name>ATQ Thread pool utilization high</name>
+            <priority>WARNING</priority>
+        </trigger>
+    </triggers>
+</zabbix_export>

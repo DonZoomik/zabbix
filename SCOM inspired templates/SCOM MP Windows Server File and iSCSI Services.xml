@@ -1,0 +1,2361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:48:42Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>SCOM MP Windows Server File and iSCSI Services</template>
+            <name>SCOM MP Windows Server File and iSCSI Services</name>
+            <description>https://systemcenter.wiki/?GetCategory=Windows+Server+File+%26+iSCSI+Services</description>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Deduplication</name>
+                </application>
+                <application>
+                    <name>DFSN</name>
+                </application>
+                <application>
+                    <name>DFSR</name>
+                </application>
+                <application>
+                    <name>FSRM</name>
+                </application>
+                <application>
+                    <name>iSCSI Target</name>
+                </application>
+                <application>
+                    <name>NFS</name>
+                </application>
+                <application>
+                    <name>SMB</name>
+                </application>
+                <application>
+                    <name>Work Folders</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>DFSR Global Events</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[DFS Replication,,,DFSR,1004|1104,,skip]</key>
+                    <delay>60s</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-N: Service Initialization</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,&quot;(1451[0-9]|1452[0-2]|14531|14533)&quot;,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.Service.InitializationState&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0&#13;
+and&#13;
+{logeventid(14531|14533)}=0</expression>
+                            <name>DFS-N: DFS Namespace Service Failed to Initialize and is not Running</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: The Root Directory for a Namespace Was Created on FAT Volume</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14504,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.FileSystemNotSupportedAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: The Root Directory for a Namespace Was Created on FAT Volume</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Namespace Root Not Created Because of Overlapping Namespace Root Directories</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14505,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.OverlappingExistingRootAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: Namespace Root Not Created Because of Overlapping Namespace Root Directories</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Active Directory Domain Services Availability</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14523|14508,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.ADPerspective.ADAvailability&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{logeventid(14523)}=1</expression>
+                            <name>DFS-N: Active Directory Domain Services is not accessible</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: AD DS Site Support Table Initialization</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14524|14531,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.Service.ADSiteSupportTableInitialization&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{logeventid(14524)}=1</expression>
+                            <name>DFS-N: Could not initialize the site support table</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Namespace Server Communication with Active Directory Domain Services</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14526|14529,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.ADPerspective.ADConnectivity&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0 and {logeventid(14529)}=0</expression>
+                            <name>DFS-N: Namespace server could not contact Active Directory Domain Services</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Domain Referral Overflow</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14536,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.DomainReferralOverflowAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: Domain Referral of Known Domain Names is Full</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Folder Target List Is Corrupt</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14543,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.TargetListIncorrectAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: Folder Target List Is Corrupt</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Folders Overlap</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14544,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.LinksOverlap&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: Folders Overlap</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Folder Overlap</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14545,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.DfsLinkOverlapAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: Folder Overlap</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Duplicate DFS Folders</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14547,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.DuplicateLinksAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0</expression>
+                            <name>DFS-N: Duplicate DFS Folders</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Trusted Domain Initialization</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14548|14549,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.TrustedDomainInfoFailed&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{nodata(24h)}=0 and {logeventid(14549)}=0</expression>
+                            <name>DFS-N: Trusted Domain Initialization Failed</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Cross-Forest Trust Initialization State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>eventlog[System,,,Microsoft-Windows-DfsSvc,14550|14551,,skip]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.TrustedForestInfoFailed&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{logeventid(14550)}=1</expression>
+                            <name>DFS-N: Cross-Forest Trust Initialization State Failed</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Server Service: Firewall Status 139</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[tcp,,139]</key>
+                    <status>DISABLED</status>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServices.Service.SMB.6.3.FirewallPortConfig&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServices.SMB.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>SMB</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{max(#15)}&lt;1</expression>
+                            <name>Server Service: File and Printer Sharing Port 139 Blocked</name>
+                            <status>DISABLED</status>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Server Service: Firewall Status 445</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[tcp,,445]</key>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServices.Service.SMB.6.3.FirewallPortConfig&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServices.SMB.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>SMB</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{max(#15)}&lt;1</expression>
+                            <name>Server Service: File and Printer Sharing Port 445 Blocked</name>
+                            <status>DISABLED</status>
+                            <priority>HIGH</priority>
+                            <description>Either Windows Firewall is disabled or the firewall inbound rules for TCP ports 445 or 139 are disabled.</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-N: Service Status</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service.info[Dfs]</key>
+                    <delay>5m</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.Service.AvailabilityState&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSN</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Windows service state</name>
+                    </valuemap>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;0 and {last()}&lt;&gt;255</expression>
+                            <name>DFS-N: DFS Namespace Service is not Running</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Read-Only Mini-Filter Driver Loading</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service_state[DfsrRo]</key>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.ReadOnlyFilterDriver.LoadedMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Windows service state</name>
+                    </valuemap>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;0 and {last()}&lt;&gt;255</expression>
+                            <name>DFS-R: Read-Only Mini-Filter Driver Not Loaded</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Service Availability</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service_state[Dfsr]</key>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ServiceStoppedMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Windows service state</name>
+                    </valuemap>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Post Backup or Restore Service Startup</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=1106) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.PostBackupRestoreFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Restore Configuration</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=1112) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.ReadOnly.InvalidAuthRestore&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Authoritative Restore Operation Attempted on Read-Only Replicated Folder</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Domain Controller Communication</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=1202) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DCUnreachableMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Failed to Contact a Domain Controller</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: RPC Registration</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=1208) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.RPCRegistrationFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Debug Logging</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=1302) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DebugLoggingFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Failed to Write to the Debug Log</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Debug Logging Initialization</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=1312) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DebugLogInitFailedMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Volume Health</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2004) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplForVolStoppedOnErrorMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Volume Database Integrity</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2102) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DBRecreationMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Replication is Stopped While the Database is Recreated</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Replication Database</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2104) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InternalDBErrorMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: NTFS Change Journal Wrap Frequency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2202) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Count 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.FrequentChangeJournalWrapsMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: NTFS Change Journal Wraps</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2202) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.JournalWrapMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: NTFS Change Journal Availability</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2204) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.JournalLossMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: NTFS Change Journal Recovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2208) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.JournalWrapRecoveryFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: NTFS Change Journal Creation</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2210) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.UsnJournalCreationFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Service Shutdown Health</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=2212) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DirtyShutdownMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replication Error Status</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4004) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplicationStoppedOnErrorMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replication Status</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4008) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplicationStoppedMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Offline Duration</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4012) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplicatedFolderOfflineMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Non-Authoritative Database Rebuild State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4110) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DatabaseRecoveryMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Non-Authoritative Database Rebuild Operation Started</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Enabled State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4114) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplicatedFolderDisabledMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Staging Folder Cleanup Health</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4206) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.StagingCleanupFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Staging Space</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4208) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InsufficientStagingSpaceMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Staging Folder Accessibility</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4212) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidStagingPathMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Encrypted File Detection</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4402) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.EncryptedFileMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Reparse Point Support</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4406) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.UnsupportedReparseTagMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Available Disk Space</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=4502) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.FreeSpaceMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Partner Communication</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=5002) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.CommunicationErrorWithPartnerMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Communication Error During Replication</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Replication Group Member Communication</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=5008) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ServiceUnavailableMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Configuration Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=5012) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.UnrecognizedPartnerMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replication Protocol Version Compatibility</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=5102) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.IncompatibleProtocolOnPartnerMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: AD DS Configuration Validity</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6002) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidConfigObjectDataMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: AD DS Configuration Duplication</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6004) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DuplicateConfigInfoMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: AD DS Configuration Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6006) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InconsistentConfigObjectMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Parameter Validity</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6008) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidConfigParameterMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: AD DS Schema Version</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6012) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.IncompatibleDsSchemaMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: AD DS Configuration Updates</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6016) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DsConfigUpdateFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Outbound Connections</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6020) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.FolderMissingOutboundConnection&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Read-Only Replicated Folder Inbound Connections</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6022) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.FolderMissingInboundConnection&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: WMI Registration</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6104) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.WmiProviderRegistrationFailureMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Volume Support</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6302) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.UnsupportedVolumeMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Overlap with FRS Path</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6402) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.FrsFolderOverlapMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Local Path Availability</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6404) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidRootPathMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Path Database Consistency</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6406) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplicatedFolderRootMismatchMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Overlap State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6408) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DfsrFolderOverlapMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder and System Folder Overlap State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6410) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.WorkingFolderOverlapsSystemFolderMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder and Debug Log Folder Overlap State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6412) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.WorkingFolderOverlapsLoggingFolderMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Volume Configuration Conflicts</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6602) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InconsistentVolumeConfigMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Configuration Validity</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6606) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InconsistentConfigMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Enabled Connections</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6802) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DisabledConnectionsMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Two-way Connections</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=6804) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.MissingConnectionsMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Cluster Resource Creation and Updates</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9001) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.ResourceCreateUpdateFailedMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Cannot Create or Update a Cluster Resource for a Clustered Replicated Folder</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Cluster Resource Deletion</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9004) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.ResourceDeleteFailed&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Couldn’t Delete Cluster Resource</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Resource Dependencies and Replicated Folder Type Updating</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9007) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.ResourcePropertyDependencyUpdateFailed&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Unable to Update Resource Dependencies or Replicated Folder Type</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Clustered Replicated Folder Initialization</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9009) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.ResourceOnlineFailed&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Clustered Replicated Folder Failed to Initialize</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Clustered Replicated Folder</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9010) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.ResourceOffline&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Shared Storage</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9100) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.ReplicatedFolder.InvalidClusteredRoot&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Clustered Replicated Folder Located in Local Storage on a Node</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Path State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9101) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidRootPathOnSharedDisk&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Staging Folder Shared Storage</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9102) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.ReplicatedFolder.InvalidClusterStagingPath&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Staging Folder Located in Local Storage on a Node</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Staging Folder Path State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9103) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidReplicatedFolderStagingPathOnSharedDisk&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Path</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9104) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.RootPathInDifferentClusterGroup&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Replicated Folder Located on a Disk Not Owned by the Correct Clustered File Server Instance</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Staging Folder Path</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9105) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.InvalidStagingPathDifferentClusterGroup&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Staging Folder Located on a Disk Not Owned by the Correct Clustered File Server Instance</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Failover Cluster and Cluster Node Validity</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9106) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.InvalidNetworkNameToNodeReplication&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Replication Group Contains a Clustered File Server Instance and a Node of the Same Failover Cluster</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: Failover Cluster Node Replication Group Membership</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9107) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.InvalidSameClusterNetworkNameMembers&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Multiple Members from the Same Failover Cluster</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>DFS-R: SYSVOL Replicated Folder Path State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9108) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidSysvolRootPathOnSharedDisk&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: SYSVOL Staging Folder Path State</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9109) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.InvalidSysvolStagingPathOnSharedDisk&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>DFS-R: Replicated Folder Root and Staging Folder Availability</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''DFSR''] and (EventID=9110) and TimeCreated[timediff(@SystemTime)^&lt;86400000]]]' -Lo 'DFS Replication').Message 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.6.3.Cluster.ReplicatedFolderDiskNotOnline&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>DFSR</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{strlen()}&lt;&gt;0</expression>
+                            <name>DFS-R: Replicated Folder and/or Staging Folder Path is Offline</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Server Service: Shared Folder Creation</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[Provider[@Name=''Server''] and (EventID=2511)] and TimeCreated[timediff(@SystemTime)^&lt;86400000]]' -Lo System).Count 2^&gt;$nul&quot;]</key>
+                    <delay>1h</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServices.Service.SMB.6.3.CreateShareEvent&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServices.SMB.2012R2&amp;Version=7.1.10100.1</description>
+                    <applications>
+                        <application>
+                            <name>SMB</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;&gt;0</expression>
+                            <name>Server Service: Failed to Create Share</name>
+                            <priority>HIGH</priority>
+                            <description>The following has occurred {0} times: &#13;
+Event Description: {1}</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>DFSN Root Targets</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;powershell @{data=@(Try{Get-DfsnRoot^|Get-DfsnRootTarget^|? targetpath -Match $env:computername^|%{$n=$_.targetpath.split('\')[3];@{'{#P}'=$_.Path;'{#T}'=$_.TargetPath;'{#N}'=$n;'{#L}'=(Get-SmbShare $n).path}}}Catch{})}^|ConvertTo-Json -C&quot;]</key>
+                    <delay>1d</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.RootTargetMetadataState&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DFS-N: Reparse Point and Directory Creation {#L}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#L},,Microsoft-Windows-DfsSvc,14503|14546,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{logeventid(14503)}=1</expression>
+                                    <name>DFS-N: Failed to Create a Reparse Point or Directory {#L}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-N: Namespace Root Error State {#N}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#N},,Microsoft-Windows-DfsSvc,14509|14552,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{logeventid(14509)}=1</expression>
+                                    <name>DFS-N: Namespace Root Has a Large Number of Errors {#N}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-N: Namespace Server AD DS Connectivity {#N}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#N},,Microsoft-Windows-DfsSvc,14530|14532,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.RootTargetADConnectivity&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{logeventid(14530)}=1</expression>
+                                    <name>DFS-N: Namespace Server Cannot Access Data in AD DS {#N}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-N: Namespace Initialization {#N}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#N},,Microsoft-Windows-DfsSvc,14534|14552,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{logeventid(14534)}=1</expression>
+                                    <name>DFS-N: Namespace Root Initialization Failed {#N}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-N: Folder Move Operation {#N}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#N},,Microsoft-Windows-DfsSvc,14538,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.RootTarget.MoveLinkFailedAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0</expression>
+                                    <name>DFS-N: Unable to Move DFS Folder {#N}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-N: Namespace Server Synchronization {#N}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#N},,Microsoft-Windows-DfsSvc,14539|517,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{logeventid(14539)}=1</expression>
+                                    <name>DFS-N: Namespace Server Synchronization Failed {#N}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-N: Folder Removal {#N}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[System,{#N},,Microsoft-Windows-DfsSvc,14540,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSN.6.3.RootTarget.RemoveLinkFailedAlertRule&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSN.2012R2&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0</expression>
+                                    <name>DFS-N: Link remove operation failed</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Root target state {#P} {#T}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell If((((dfsutil property state {#P} {#T}^|sls state) -split ' ')[3]) -eq 'ONLINE'){0}else{1}&quot;]</key>
+                            <delay>1800</delay>
+                            <applications>
+                                <application>
+                                    <name>DFSN</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;&gt;0</expression>
+                                    <name>DFS-N target is not online {#P} {#T}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Deduplication volumes</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell @{data=@($(try{get-dedupvolume}catch{})^|%{@{'{#D}'=$_.Volume;'{#V}'=$_.VolumeId}})}^|convertto-json -C]</key>
+                    <delay>1d</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Deduplication insufficient memory {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[Microsoft-Windows-Deduplication/Diagnostic,{#D},Warning,Microsoft-Windows-Deduplication,10243,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0</expression>
+                                    <name>Deduplication insufficient memory {#D}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Optimization Memory Required {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[(EventID=10240)] and EventData[Data[@Name=''JobType'']=1] and EventData[Data[@Name=''VolumeDisplayName'']=''{#D}'']]' -Lo 'Microsoft-Windows-Deduplication/Diagnostic' -M 1).properties[4].value&quot;]</key>
+                            <delay>1d</delay>
+                            <units>B</units>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <params>1048576</params>
+                                </step>
+                            </preprocessing>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Garbage Collection Memory Required {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[(EventID=10240)] and EventData[Data[@Name=''JobType'']=2] and EventData[Data[@Name=''VolumeDisplayName'']=''{#D}'']]' -Lo 'Microsoft-Windows-Deduplication/Diagnostic' -M 1).properties[4].value&quot;]</key>
+                            <delay>1d</delay>
+                            <units>B</units>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <params>1048576</params>
+                                </step>
+                            </preprocessing>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Scrubbing Memory Required {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[&quot;powershell (Get-WinEvent -FilterXP '*[System[(EventID=10240)] and EventData[Data[@Name=''JobType'']=3] and EventData[Data[@Name=''VolumeDisplayName'']=''{#D}'']]' -Lo 'Microsoft-Windows-Deduplication/Diagnostic' -M 1).properties[4].value&quot;]</key>
+                            <delay>1d</delay>
+                            <units>B</units>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <params>1048576</params>
+                                </step>
+                            </preprocessing>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Last Garbage Collection Time {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[powershell (new-timespan -start ((get-dedupstatus -volume {#D}).LastGarbageCollectionTime)).days]</key>
+                            <delay>1d</delay>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Last Optimization Time {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[powershell (new-timespan -start ((get-dedupstatus -volume {#D}).LastOptimizationTime)).days]</key>
+                            <delay>1d</delay>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Last Scrubbing Time {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>system.run[powershell (new-timespan -start ((get-dedupstatus -volume {#D}).LastScrubbingTime)).days]</key>
+                            <delay>1d</delay>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Last Garbage Collection Result {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>wmi.get[Root\Microsoft\Windows\Deduplication,select LastGarbageCollectionResult from MSFT_DedupVolumeStatus where volume='{#D}']</key>
+                            <delay>1h</delay>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Last Optimization Result {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>wmi.get[Root\Microsoft\Windows\Deduplication,select LastOptimizationResult from MSFT_DedupVolumeStatus where volume='{#D}']</key>
+                            <delay>1h</delay>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Last Scrubbing Result {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>wmi.get[Root\Microsoft\Windows\Deduplication,select LastScrubbingResult from MSFT_DedupVolumeStatus where volume='{#D}']</key>
+                            <delay>1h</delay>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Saved Space {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>wmi.get[Root\Microsoft\Windows\Deduplication,select SavedSpace from MSFT_DedupVolumeStatus where volume='{#D}']</key>
+                            <delay>1d</delay>
+                            <units>B</units>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Savings Rate {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>wmi.get[Root\Microsoft\Windows\Deduplication,select SavingsRate from MSFT_DedupVolumeStatus where volume='{#D}']</key>
+                            <delay>1d</delay>
+                            <units>%</units>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Deduplication Unoptimized Size {#D}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>wmi.get[Root\Microsoft\Windows\Deduplication,select UnoptimizedSize from MSFT_DedupVolumeStatus where volume='{#D}']</key>
+                            <delay>1d</delay>
+                            <units>B</units>
+                            <applications>
+                                <application>
+                                    <name>Deduplication</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>DFSR Replicated Folders Performance Counter Instance</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell @{data=@((gwmi -Q 'Select Name From Win32_PerfRawData_dfsr_DFSReplicatedFolders').Name^|%{@{'{#I}'=$_}})}^|ConvertTo-Json -C]</key>
+                    <delay>3h</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ConflictFilesCleanedup&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DFS-R: Removed Conflict Files {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Conflict Files Cleaned up&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ConflictFilesCleanedup&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Conflict Files Generated {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Conflict Files Generated&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ConflictFilesGenerated&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Conflict And Deleted Folder Cleanups Completed {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Conflict Folder Cleanups Completed&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ConflictFolderCleanupsCompleted&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Conflict Space in Use {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Conflict Space In Use&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ConflictSpaceInUse&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Deleted Files Cleaned Up {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Deleted Files Cleaned up&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DeletedFilesCleanedup&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Deleted Files Generated {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Deleted Files Generated&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DeletedFilesGenerated&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Deleted Space In Use {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Deleted Space In Use&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DeletedSpaceInUse&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Staging Bytes Cleaned Up {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Staging Bytes Cleaned up&quot;,900]</key>
+                            <delay>900</delay>
+                            <units>B</units>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.StagingBytesCleanedup&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Staging Bytes Generated {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Staging Bytes Generated&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.StagingBytesGenerated&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Staging Space In Use {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replicated Folders({#I})\Staging Space In Use&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.StagingSpaceInUse&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>DFSR Connection Performance Counter Instance</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell @{data=@((gwmi -Q 'Select Name From Win32_PerfRawData_dfsr_DFSReplicationConnections').Name^|%{@{'{#I}'=$_}})}^|ConvertTo-Json -C]</key>
+                    <delay>3h</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.BandwidthSavingsUsingDFSReplication&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DFS-R: Bandwidth Savings {#I}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>perf_counter[&quot;\DFS Replication Connections({#I})\Bandwidth Savings Using DFS Replication&quot;,900]</key>
+                            <delay>900</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.BandwidthSavingsUsingDFSReplication&amp;Type=Rule&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>DFSR Replication Group</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell @{data=@(gwmi -Q 'Select * From DfsrReplicationGroupConfig' -N ROOT\MicrosoftDfs 2^&gt;$nul^|%{@{'{#N}'=$_.ReplicationGroupName;'{#G}'=$_.ReplicationGroupGuid}})}^|ConvertTo-Json -C]</key>
+                    <delay>3h</delay>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>DFS-R Replication Group Members</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[powershell @{data=@(gwmi DfsrLocalMemberInfo -N Root\MicrosoftDfs 2^&gt;$nul^|%{@{'{#RN}'=$_.ReplicationGroupName;'{#MN}'=$_.MemberName;'{#RG}'=$_.ReplicationGroupGuid;'{#MG}'=$_.MemberGuid}})}^|convertto-json]</key>
+                    <delay>1d</delay>
+                    <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ReplicationGroupMember&amp;Type=ClassType&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1&#13;
+&#13;
+Does not collect cluster information, not sure if needed...</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>DFS-R: Partner Communication {#RN}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DFS Replication,{#RG},,DFSR,5002|5004|5006|5016|9111,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.CommunicationErrorWithPartnerMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(5002)}=1</expression>
+                                    <name>DFS-R: Communication Error During Replication {#RN}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Replication Group Member Communication {#RN}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DFS Replication,{#RG},,DFSR,5008|5004|5006|5016|9111,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.ServiceUnavailableMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(5008)}=1</expression>
+                                    <name>DFS-R: Failed to Reach a Replication Group Member {#RN}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Configuration Consistency {#RN}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DFS Replication,{#RG},,DFSR,5012|5004|5006|5016|9111,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.UnrecognizedPartnerMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(5012)}=1</expression>
+                                    <name>DFS-R: Connection or Replication Group Configuration Doesn’t Match with AD DS {#RN}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Replication Protocol Version Compatibility {#RN}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DFS Replication,{#RG},,DFSR,5102|5004|5006|5016|9111,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.IncompatibleProtocolOnPartnerMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(5102)}=1</expression>
+                                    <name>DFS-R: Replication Failed Because of Incompatible Replication Protocol Version {#RN}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>DFS-R: Enabled Connections {#RN}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>eventlog[DFS Replication,{#RG},,DFSR,6802|6804|6808|3004|3006|9111,,skip]</key>
+                            <delay>1h</delay>
+                            <trends>0</trends>
+                            <value_type>LOG</value_type>
+                            <description>https://systemcenter.wiki/?GetElement=Microsoft.Windows.FileServer.DFSR.DisabledConnectionsMonitor&amp;Type=UnitMonitor&amp;ManagementPack=Microsoft.Windows.FileServer.DFSR.Library&amp;Version=7.1.10100.1</description>
+                            <applications>
+                                <application>
+                                    <name>DFSR</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(24h)}=0 and {logeventid(6802)}=1</expression>
+                                    <name>DFS-R: No Connections Are Enabled for a Replication Group {#RN}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+    <value_maps>
+        <value_map>
+            <name>Windows service state</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Running</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Paused</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>Start pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>Pause pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>Continue pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>5</value>
+                    <newvalue>Stop pending</newvalue>
+                </mapping>
+                <mapping>
+                    <value>6</value>
+                    <newvalue>Stopped</newvalue>
+                </mapping>
+                <mapping>
+                    <value>7</value>
+                    <newvalue>Unknown</newvalue>
+                </mapping>
+                <mapping>
+                    <value>255</value>
+                    <newvalue>No such service</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-11-18T09:46:24Z</date>
+    <groups>
+        <group>
+            <name>WindowsTemplates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Intel RSTe</template>
+            <name>Intel RSTe</name>
+            <description>Add RSTe CLI to Zabbix root</description>
+            <groups>
+                <group>
+                    <name>WindowsTemplates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Intel RSTe</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>RSTe object status</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.run[&quot;for /F \&quot;tokens=2 delims=: \&quot; %a in ('cmd /c \&quot;%programfiles%\zabbix agent\IntelVROCCli.exe\&quot; --information -v ^| find /i \&quot;State\&quot;') do @echo %a&quot;]</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>Intel RSTe</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{str(Degraded)}=1 or {str(Failed)}=1</expression>
+                            <name>RSTe failure</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+</zabbix_export>
