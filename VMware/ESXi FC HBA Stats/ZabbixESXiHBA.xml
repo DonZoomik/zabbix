@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2022-11-09T14:34:23Z</date>
+    <groups>
+        <group>
+            <uuid>7c2cb727f85b492d88cd56e17127c64d</uuid>
+            <name>Templates/SAN</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>0bcc95622bda4d92be25fe3d8eea6041</uuid>
+            <template>ESXi FC Stats</template>
+            <name>ESXi FC Stats</name>
+            <groups>
+                <group>
+                    <name>Templates/SAN</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>70acc7c7be954269ba79989a6b8e93c1</uuid>
+                    <name>ESXCLI FC Stats</name>
+                    <type>TRAP</type>
+                    <key>esxclifcstats</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <triggers>
+                        <trigger>
+                            <uuid>c3e2c601ceb2491ba73f0429e4a7bf82</uuid>
+                            <expression>nodata(/ESXi FC Stats/esxclifcstats,1h)=0</expression>
+                            <name>FC HBA Data not updated</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>cc4197992b1a4bb98d768d1ef4b16f3f</uuid>
+                    <name>FC HBA</name>
+                    <type>DEPENDENT</type>
+                    <key>esxfchba</key>
+                    <delay>0</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>8fe1a2f472c24958bd561c9c14d57367</uuid>
+                            <name>ESX FC {#ESXFCADAPTER} Invalid CRC Count</name>
+                            <type>DEPENDENT</type>
+                            <key>esxfchba[{#ESXFCADAPTER},invalidcrccount]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$[?(@.Adapter == '{#ESXFCADAPTER}')].InvalidCRCCount.first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>esxclifcstats</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>98d5b31ae89440e6bff32d259f956f51</uuid>
+                                    <expression>last(/ESXi FC Stats/esxfchba[{#ESXFCADAPTER},invalidcrccount])>last(/ESXi FC Stats/esxfchba[{#ESXFCADAPTER},invalidcrccount],#1)</expression>
+                                    <name>ESX FC HBA {#ESXFCADAPTER} Invalid CRC Count Up</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>7a6b2cb4e8284faaa8fd5c5b28914eff</uuid>
+                            <name>ESX FC {#ESXFCADAPTER} Invalid TX Word Count</name>
+                            <type>DEPENDENT</type>
+                            <key>esxfchba[{#ESXFCADAPTER},invalidtxwordcount]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$[?(@.Adapter == '{#ESXFCADAPTER}')].InvalidTxWordCount.first()</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>esxclifcstats</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>6554fc58e2884224b9ae0a3169d503ee</uuid>
+                                    <expression>last(/ESXi FC Stats/esxfchba[{#ESXFCADAPTER},invalidtxwordcount])>last(/ESXi FC Stats/esxfchba[{#ESXFCADAPTER},invalidtxwordcount],#1)</expression>
+                                    <name>ESX FC HBA {#ESXFCADAPTER} Invalid Tx Word Count Up</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>a42e467ee4ba41f482f5b22ef99558f1</uuid>
+                            <name>ESX FC {#ESXFCADAPTER} RX Frames</name>
+                            <type>DEPENDENT</type>
+                            <key>esxfchba[{#ESXFCADAPTER},rxframes]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$[?(@.Adapter == '{#ESXFCADAPTER}')].RxFrames.first()</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>esxclifcstats</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>esxclifcstats</key>
+                    </master_item>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#ESXFCADAPTER}</lld_macro>
+                            <path>$.Adapter</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
